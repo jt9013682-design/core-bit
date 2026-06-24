@@ -1,28 +1,137 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>CoreBit AI</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>CoreBit AI v2</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b0f14;
+  color: white;
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: #111826;
+  padding: 15px;
+}
+
+.sidebar h2 {
+  color: #00ff9d;
+}
+
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  background: #111826;
+  padding: 10px;
+  color: #00ff9d;
+  font-weight: bold;
+}
+
+.messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.inputBox {
+  display: flex;
+  padding: 10px;
+  background: #111826;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+button {
+  background: #00ff9d;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<div class="login" id="loginBox">
-  <h2>CoreBit Login</h2>
-  <input type="text" id="user" placeholder="Usuário">
-  <input type="password" id="pass" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
+<div class="sidebar">
+  <h2>CoreBit AI</h2>
+  <p>🧠 IA evoluída</p>
 </div>
 
-<div class="chat" id="chatBox" style="display:none;">
-  <h2>🧠 CoreBit AI</h2>
+<div class="chat">
 
-  <div id="messages"></div>
+  <div class="top">CoreBit v2 - IA Online</div>
 
-  <input type="text" id="input" placeholder="Digite algo...">
-  <button onclick="send()">Enviar</button>
+  <div class="messages" id="messages"></div>
+
+  <div class="inputBox">
+    <input id="input" placeholder="Pergunte algo...">
+    <button onclick="send()">Enviar</button>
+  </div>
+
 </div>
 
-<script src="script.js"></script>
+<script>
+const API_KEY = "SUA_API_AQUI"; // ⚠️ depois você troca
+
+let history = [];
+
+function add(text, cls) {
+  const div = document.createElement("div");
+  div.innerText = text;
+  div.style.margin = "8px 0";
+  div.style.color = cls === "user" ? "#4da3ff" : "#00ff9d";
+  document.getElementById("messages").appendChild(div);
+}
+
+async function send() {
+  const input = document.getElementById("input");
+  const msg = input.value;
+  if (!msg) return;
+
+  add("Você: " + msg, "user");
+
+  input.value = "";
+
+  history.push({ role: "user", content: msg });
+
+  add("CoreBit: pensando...", "ai");
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + API_KEY
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: history
+    })
+  });
+
+  const data = await res.json();
+
+  const reply = data.choices?.[0]?.message?.content || "Erro";
+
+  history.push({ role: "assistant", content: reply });
+
+  add("CoreBit: " + reply, "ai");
+}
+</script>
+
 </body>
 </html>
