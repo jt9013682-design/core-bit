@@ -1,60 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Core Bit AI</title>
-    <style>
-        body { font-family: sans-serif; background: #0b0f19; color: white; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .screen { display: none; width: 100%; max-width: 500px; padding: 20px; }
-        .active { display: block; }
-        input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: none; }
-        button { background: #3b82f6; color: white; font-weight: bold; cursor: pointer; }
-        .chat-box { height: 300px; background: #111827; border: 1px solid #333; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
-    </style>
+  <meta charset="UTF-8">
+  <title>CoreBit AI</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- TELA 1: LOGIN -->
-    <div id="login-screen" class="screen active">
-        <h1>Login Core Bit</h1>
-        <input type="email" id="email" placeholder="Seu e-mail">
-        <button onclick="login()">Entrar</button>
-    </div>
+<div class="login" id="loginBox">
+  <h2>CoreBit Login</h2>
+  <input type="text" id="user" placeholder="Usuário">
+  <input type="password" id="pass" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+</div>
 
-    <!-- TELA 2: CHAT IA -->
-    <div id="chat-screen" class="screen">
-        <div class="chat-box" id="chat">IA: Como posso ajudar hoje?</div>
-        <input type="text" id="msg" placeholder="Digite sua mensagem...">
-        <button onclick="enviar()">Enviar</button>
-    </div>
+<div class="chat" id="chatBox" style="display:none;">
+  <h2>🧠 CoreBit AI</h2>
 
-    <!-- TELA 3: PAINEL ADMIN -->
-    <div id="admin-screen" class="screen">
-        <h2>Painel do Dono</h2>
-        <p>Você está logado como admin.</p>
-        <button onclick="location.reload()">Sair</button>
-    </div>
+  <div id="messages"></div>
 
-    <script>
-        function login() {
-            const email = document.getElementById('email').value;
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            
-            if (email === "officeneto38@gmail.com") {
-                document.getElementById('admin-screen').classList.add('active');
-            } else {
-                document.getElementById('chat-screen').classList.add('active');
-            }
-        }
+  <input type="text" id="input" placeholder="Digite algo...">
+  <button onclick="send()">Enviar</button>
+</div>
 
-        function enviar() {
-            const msg = document.getElementById('msg').value;
-            const chat = document.getElementById('chat');
-            chat.innerHTML += `<p>Você: ${msg}</p>`;
-            document.getElementById('msg').value = '';
-            setTimeout(() => { chat.innerHTML += `<p style="color: #3b82f6">Core Bit: Resposta automática...</p>`; }, 1000);
-        }
-    </script>
+<script src="script.js"></script>
 </body>
 </html>
